@@ -84,3 +84,93 @@ contract Review2 {
    }
 }
 
+contract Review3 {
+    /*
+    실습가이드
+    1. getABC()로 초기값 확인해보기
+    2. setA(), setB(), setC() 한 후 getABC() 해서 값 변화 확인하기
+    3. getABC2() 해서 결과 확인하기
+    */
+
+    enum Food {
+        Chicken,
+        Sushi,
+        Bread,
+        Coconut
+    }
+
+    Food a;
+    Food b;
+    Food c;
+
+    function setA() public {
+        a = Food.Chicken;
+    }
+
+    function setB() public {
+        b = Food.Sushi;
+    }
+
+    function setC() public {
+        c = Food.Coconut;
+    }
+
+    function setD(uint _n) public {
+        c = Food(_n);
+    }
+
+    function getABC() public view returns(Food, Food, Food) {
+        return(a, b, c);
+    }
+
+    
+}
+
+contract Review4 {
+    /*
+    실습가이드
+    1. getA(), getST()로 초기값 확인하기 -> (5,0)
+    2. higher(), getA() -> 결과 확인하기
+    3. higher(), getA() -> 결과 확인하기, status 변화 확인하기
+    4. lower() 5번 후 getA() -> 결과 확인하기, status 변화 확인하기
+    5. higher() 3번 후 getA() -> 결과 확인하기, status 변화 확인하기 
+    */
+
+    enum Status{
+        neutral,
+        high,
+        low
+    }
+
+    Status st;
+    uint a;
+
+    function higher() public {
+        a++;
+        setA();
+    }
+
+    function lower() public {
+        a--;
+        setA();
+    }
+
+    function setA() public {
+        if(a>=7){
+            st = Status.high;
+        } else if(a<=3){
+            st = Status.low;
+        } else {
+            st = Status.neutral;
+        }
+    }
+
+    function getA() public view returns(uint) {
+        return a;
+    }
+
+    function getST() public view returns(Status) {
+        return st;
+    }
+
+}
