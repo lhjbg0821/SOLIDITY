@@ -75,39 +75,56 @@ function getStudent2(string memory _name) public view returns(uint) {
         return totalScore / students.length; //totalScore / getStudentNumber() 이것도 동작하는 지 확인하기!
     }
 // * 11. 선생 지도 자격 자가 평가 시스템 - 학생들의 평균 점수가 70점 이상이면 true, 아니면 false를 반환
-    // function selfEva() public view returns(bool) {
-    //     if(getAverage() >= 70) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }0
-    //     uint num;
-        
-    //     Student[num] memory F_students;
-    //     for (uint i=0; i<students.length; i++) {
-    //         if(keccak256(bytes(students[i].credit)) == keccak256(bytes("F"))) {
-    //             F_Students[i] = students[i];
-    //         }
-    //     }
-    // }
-// -------------------------------------------------------------------------------
+    function selfEva() public view returns(bool) {
+        if(getAverage() >= 70) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //    
+// * 12. 보충반 조회 기능 - F 학점을 받은 학생들의 숫자와 그 전체 정보를 반환
+    function FClass() public view returns(Student[] memory) {
+        uint num;
+
+        for(uint i=0; i<students.length; i++){
+            if(keccak256(bytes(students[i].credit)) == keccak256(bytes("F"))) {
+                num++;
+            }
+        }
+
+        Student[] memory F_Storage = new Student[](num);
+
+        uint _num;
+
+        for(uint i=0; i<students.length;i++) {
+            if(keccak256(bytes(students[i].credit)) == keccak256(bytes("F"))) {
+                F_Storage[_num] = students[i];
+            }
+            _num++;
+        }
+        return F_Storage;
+    }
+// ----------------------------------------------------------
 // * S반 조회 기능 - 가장 점수가 높은 학생 4명을 S반으로 설정하는데, 이 학생들의 전체 정보를 반환하는 기능 (S반은 4명으로 한정)
+    function SClass() public view returns(Student[] memory) {
+        Student[] memory S_Students = students;
+        Student[] memory S_Class = new Student[](4);
 
-// 기입할 학생들의 정보는 아래와 같습니다.
+        for(uint i=0;i<S_Students.length-1;i++) {
+            for(uint j=i+1; j<S_Students.length ;j++) {
+                if(S_Students[i].score < S_Students[j].score) {
+                    (S_Students[i], S_Students[j]) = (S_Students[j], S_Students[i]);
+                }
+            }
+        }
 
-// Alice, 1, 85
-// Bob,2, 75
-// Charlie,3,60
-// Dwayne, 4, 90
-// Ellen,5,65
-// Fitz,6,50
-// Garret,7,80
-// Hubert,8,90
-// Isabel,9,100
-// Jane,10,70
+        for(uint i=0; i<4; i++) {
+            S_Class[i] = S_Students[i];
+        }
 
-
+        return S_Students;
+    }
 }
 
 contract STRING_Compare {
@@ -121,5 +138,37 @@ contract STRING_Compare {
 
     function compare1(string memory s1, string memory s2) public pure returns(bool) {
         return keccak256(bytes(s1)) == keccak256(bytes(s2));
+    }
+}
+
+contract Sorting {
+    uint[] numbers;
+
+    function push(uint _n) public {
+        numbers.push(_n);
+    }
+
+    function sorting() public {
+        for(uint i=0;i<numbers.length-1;i++) {
+            for(uint j=i+1; j<numbers.length ;j++) {
+                if(numbers[i] < numbers[j]) {
+                    (numbers[i], numbers[j]) = (numbers[j], numbers[i]);
+                }
+            }
+        }
+    }
+
+    function sorting2() public {
+        for(uint j=1; j<numbers.length; j++) {
+            for(uint i=0; i<j ; i++) {
+                if(numbers[i] < numbers[j]) {
+                    (numbers[i], numbers[j]) = (numbers[j], numbers[i]);
+                }
+            }
+        }
+    }
+
+    function get() public view returns(uint[] memory) {
+        return numbers;
     }
 }
