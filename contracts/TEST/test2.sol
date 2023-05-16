@@ -20,6 +20,7 @@ contract TEST2 {
 // * 회원가입 기능 - 새롭게 회원가입할 수 있는 기능
 
     function signIn(string memory _ID, string memory _PW) public {
+        require(ID_PW[_ID] == 0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000, "Provided ID is already being used" );
         ID_PW[_ID] = keccak256(abi.encodePacked(_ID, _PW));
     }
 // ---------------------------------------------------------------------------
