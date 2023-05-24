@@ -54,6 +54,4 @@ contract TEST2_Answer {
         require(ID_PW[_ID].hash == getHash(_ID, _PW));
         delete ID_PW[_ID];
     }
-
-
 }
